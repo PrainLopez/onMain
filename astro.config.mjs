@@ -31,5 +31,13 @@ export default defineConfig({
 				],
 			},
 		},
+		{
+			provider: fontProviders.fontsource(),
+			name: 'Space Mono',
+			cssVariable: '--font-space-mono',
+			fallbacks: ['monospace'],
+			weights: [400, 700],
+			styles: ['normal'],
+		},
 	],
 });

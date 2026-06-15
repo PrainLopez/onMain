@@ -1,0 +1,370 @@
+---
+// Prototype route: packaging label version.
+import BaseHead from "../../components/BaseHead.astro";
+import PrototypeNav from "../../components/PrototypeNav.astro";
+
+const specs = [
+  {
+    key: "contents",
+    value: "developer talk / state / color system",
+    accent: "accent-cyan",
+    span: "full"
+  },
+  {
+    key: "branch",
+    value: "main",
+    accent: "accent-green",
+    span: "cell"
+  },
+  {
+    key: "hash",
+    value: "c47d57a",
+    accent: "accent-amber",
+    span: "cell"
+  },
+  {
+    key: "record",
+    value: "07",
+    accent: "accent-violet",
+    span: "cell"
+  }
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead
+      title="on_main prototype / label"
+      description="包装标签风格的原型，像外盒和贴纸系统一样组织信息。"
+    />
+  </head>
+  <body class="prototype-label">
+    <main class="label-shell">
+      <aside class="spine" aria-label="spine">
+        <div class="spine-top">
+          <p class="eyebrow">Virtual Developer Meetup</p>
+        </div>
+        <div class="spine-title">on_main</div>
+        <p class="spine-foot">
+          <span class="sep mono">:</span>
+          <span class="label-tag accent-green">main</span>
+          <br />
+          <span class="sep mono">@</span>
+          <span class="label-tag accent-amber">c47d57a</span>
+          <br />
+          <span class="sep mono">/</span>
+          <span class="label-tag accent-violet">record 07</span>
+        </p>
+      </aside>
+
+      <section class="label-panel">
+        <div class="lead">
+          <p class="eyebrow label-tag accent-green">packing concept</p>
+          <h1>像把技术分享压成一张商品标签</h1>
+          <p class="summary">
+            这一版把 CLI
+            颜色转成包装材质和印刷分区。信息不再是终端输出，而是外盒上的规格说明、条码和贴纸。
+          </p>
+        </div>
+
+        <div class="sheet">
+          <div class="spec-grid">
+            {
+              specs.map((spec) => (
+                <article
+                  class={spec.span === "full" ? "is-contents" : undefined}
+                >
+                  <span class={`label-tag ${spec.accent}`}>{spec.key}</span>
+                  <strong>{spec.value}</strong>
+                </article>
+              ))
+            }
+          </div>
+          <div class="barcode" aria-hidden="true"></div>
+          <p class="caption">
+            hash 末尾 7 位与会议记录号对齐，像商品批次和序列号互相核验。
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <PrototypeNav
+      currentKey="prototype-label"
+      currentLabel="packaging-label"
+      prevHref="/indexes/prototype-terminal"
+      prevLabel="prototype-terminal"
+      nextHref="/indexes/prototype-control"
+      nextLabel="prototype-control"
+    />
+  </body>
+</html>
+
+<style>
+  :global(body.prototype-label) {
+    margin: 0;
+    color: #eef7f1;
+    background:
+      radial-gradient(
+        circle at 20% 16%,
+        rgba(124, 232, 194, 0.1),
+        transparent 22%
+      ),
+      radial-gradient(
+        circle at 85% 18%,
+        rgba(168, 85, 247, 0.1),
+        transparent 20%
+      ),
+      linear-gradient(180deg, #071017 0%, #030608 100%);
+    overflow-x: hidden;
+  }
+
+  .label-shell {
+    width: min(1180px, calc(100% - 20px));
+    margin: 0 auto;
+    padding: 20px 0 84px;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+
+  .spine,
+  .label-panel {
+    border: 1px solid rgba(124, 232, 194, 0.16);
+    border-radius: 10px;
+    background: rgba(4, 10, 14, 0.74);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.42);
+  }
+
+  .spine {
+    min-height: 720px;
+    height: calc(100vh - 60px);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:
+      linear-gradient(180deg, rgba(124, 232, 194, 0.1), transparent 28%),
+      linear-gradient(
+        135deg,
+        rgba(103, 232, 249, 0.08),
+        rgba(168, 85, 247, 0.08)
+      );
+  }
+
+  .spine-top {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(233, 255, 245, 0.92);
+  }
+
+  .spine-meta,
+  .spine-foot {
+    margin: 0;
+    gap: 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(233, 255, 245, 0.86);
+  }
+
+  .spine-title {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family:
+      var(--font-space-mono), "Space Mono", "JetBrains Mono", "SF Mono",
+      "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: clamp(3.2rem, 13vw, 6.5rem);
+    line-height: 0.86;
+    letter-spacing: -0.12em;
+    color: #f3fff8;
+    margin: 1rem 0;
+  }
+
+  .label-panel {
+    padding: clamp(18px, 3vw, 28px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    gap: 12px;
+  }
+
+  .lead h1 {
+    margin: 0;
+    line-height: 0.95;
+    letter-spacing: -0.08em;
+    max-width: 11ch;
+  }
+
+  .summary {
+    max-width: 52ch;
+    margin: 14px 0 0;
+    line-height: 1.8;
+    color: rgba(233, 255, 245, 0.82);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .sheet {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+  }
+
+  .stamp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+  }
+
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .spec-grid article {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .spec-grid article.is-contents {
+    grid-column: 1 / -1;
+  }
+
+  .spec-grid span {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .spec-grid strong {
+    display: block;
+    line-height: 1.5;
+    color: #f3fff8;
+  }
+
+  .barcode {
+    height: 44px;
+    border-radius: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(124, 232, 194, 0.95) 0 3px,
+      transparent 3px 6px,
+      rgba(103, 232, 249, 0.9) 6px 9px,
+      transparent 9px 14px,
+      rgba(255, 184, 108, 0.88) 14px 16px,
+      transparent 16px 22px,
+      rgba(192, 132, 252, 0.75) 22px 24px,
+      transparent 24px 30px
+    );
+  }
+
+  .caption {
+    margin: 0;
+    line-height: 1.6;
+    color: rgba(233, 255, 245, 0.74);
+  }
+
+  .label-tag {
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0px 1ch;
+    margin: 0;
+    border-radius: 0;
+    border: 0 solid transparent;
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      monospace;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .accent-green {
+    background: #2ecc40;
+    color: #07150a;
+  }
+
+  .accent-cyan {
+    background: #00d7ff;
+    color: #061015;
+  }
+
+  .accent-amber {
+    background: #ffb000;
+    color: #140d00;
+  }
+
+  .accent-violet {
+    background: #af5eff;
+    color: #100516;
+  }
+
+  .mono {
+    font-family:
+      var(--font-space-mono), "Space Mono", "JetBrains Mono", "SF Mono",
+      "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  .sep {
+    color: rgba(233, 255, 245, 0.7);
+    font-weight: 600;
+  }
+
+  @media (max-width: 980px) {
+    .label-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .spine {
+      min-height: 0;
+      height: auto;
+    }
+
+    .spine-title {
+      writing-mode: horizontal-tb;
+      transform: none;
+    }
+
+    .label-panel {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .label-shell {
+      width: min(100%, calc(100% - 12px));
+      padding-top: 12px;
+      padding-bottom: 74px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .spec-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,49 +1,97 @@
 ---
+// Prototype entry: jump into the route-based `indexes` variants.
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead
+			title="on_main"
+			description="开发者技术分享会的宣传页原型入口，进入 /indexes 查看三个路由版方案。"
+		/>
 	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
+	<body class="entry-page">
+		<main class="entry-shell">
+			<p class="eyebrow">prototype entry</p>
+			<h1>on_main</h1>
+			<p class="lede">
+				CLI prompt 风格的技术分享会宣传页。实际对比方案请去 <code>/indexes</code>，那里有三条独立路由可直接切换。
 			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<a class="button" href="/indexes">open /indexes</a>
 		</main>
-		<Footer />
 	</body>
 </html>
+
+<style>
+	:global(body.entry-page) {
+		margin: 0;
+		min-height: 100vh;
+		display: grid;
+		place-items: center;
+		color: #ecfff5;
+		background:
+			radial-gradient(circle at 20% 18%, rgba(124, 232, 194, 0.14), transparent 24%),
+			radial-gradient(circle at 82% 18%, rgba(103, 232, 249, 0.12), transparent 20%),
+			linear-gradient(180deg, #071017 0%, #030608 100%);
+	}
+
+	.entry-shell {
+		width: min(860px, calc(100% - 28px));
+		padding: clamp(28px, 5vw, 52px);
+		border-radius: 32px;
+		border: 1px solid rgba(124, 232, 194, 0.16);
+		background: rgba(4, 10, 14, 0.74);
+		backdrop-filter: blur(18px);
+		box-shadow: 0 22px 70px rgba(0, 0, 0, 0.42);
+	}
+
+	.eyebrow {
+		margin: 0 0 16px;
+		font-size: 0.78rem;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: rgba(233, 255, 245, 0.6);
+	}
+
+	h1 {
+		margin: 0;
+		font-size: clamp(3rem, 12vw, 6.8rem);
+		line-height: 0.92;
+		letter-spacing: -0.1em;
+	}
+
+	.lede {
+		max-width: 54ch;
+		margin: 18px 0 0;
+		font-size: 1.05rem;
+		line-height: 1.8;
+		color: rgba(233, 255, 245, 0.84);
+	}
+
+	code {
+		padding: 2px 6px;
+		border-radius: 6px;
+		background: rgba(255, 255, 255, 0.06);
+		color: #7ce8c2;
+	}
+
+	.button {
+		display: inline-flex;
+		margin-top: 28px;
+		padding: 12px 18px;
+		border-radius: 999px;
+		text-decoration: none;
+		font-size: 0.95rem;
+		font-weight: 700;
+		letter-spacing: 0.02em;
+		color: #03110b;
+		background: linear-gradient(135deg, #7ce8c2, #67e8f9);
+	}
+
+	@media (max-width: 720px) {
+		.entry-shell {
+			width: min(100%, calc(100% - 16px));
+		}
+	}
+</style>
