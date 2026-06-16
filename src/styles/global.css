@@ -4,6 +4,12 @@
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
 	--accent: #2337ff;
 	--accent-dark: #000d8a;
@@ -136,6 +142,10 @@ hr {
 	clip: rect(1px, 1px, 1px, 1px);
 	/* modern browsers, clip-path works inwards from each corner */
 	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
+	/* added line to stop words getting smushed together (as they go onto separate lines as some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
+}
+
+.mono {
+	font-family: var(--font-mono);
 }

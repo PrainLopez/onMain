@@ -1,41 +1,9 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
-import Barcode from "../components/Barcode.astro";
-import { sessions, type Session } from "../data/sessions";
+import SessionPanel from "../components/SessionPanel.astro";
+import { sessions } from "../data/sessions";
 
-const current = sessions[0];
-
-const specRows: Array<{
-  key: keyof Pick<Session, "branch" | "hash"> | "record" | "contents";
-  value: string;
-  accent: string;
-  span: "full" | "cell";
-}> = [
-  {
-    key: "contents",
-    value: current.topics.join(" / "),
-    accent: "accent-cyan",
-    span: "full"
-  },
-  {
-    key: "branch",
-    value: current.branch,
-    accent: "accent-green",
-    span: "cell"
-  },
-  {
-    key: "hash",
-    value: current.hash,
-    accent: "accent-amber",
-    span: "cell"
-  },
-  {
-    key: "record",
-    value: String(current.record).padStart(2, "0"),
-    accent: "accent-violet",
-    span: "cell"
-  }
-];
+const latest = sessions.reduce((acc, s) => (s.date > acc.date ? s : acc));
 ---
 
 <!doctype html>
@@ -51,58 +19,23 @@ const specRows: Array<{
       <aside class="spine" aria-label="spine">
         <div class="spine-accent-bar" aria-hidden="true"></div>
         <div class="spine-top">
-          <p class="eyebrow">Virtual Developer Meetup</p>
+          <p class="eyebrow mono">Virtual Developer Meetup</p>
         </div>
-        <div class="spine-title">on_main</div>
+        <div class="spine-title mono">on_main</div>
         <p class="spine-foot mono">
-          <span class="sep">:</span><span class="label-tag accent-green"
-            >{current.branch}</span
-          >
+          <span class="label-tag mono accent-green">: {latest.branch}</span>
           <br />
-          <span class="sep">@</span><span class="label-tag accent-amber"
-            >{current.hash}</span
-          >
+          <span class="label-tag mono accent-amber">@ {latest.hash}</span>
           <br />
-          <span class="sep">/</span><span class="label-tag accent-violet"
-            >record {String(current.record).padStart(2, "0")}</span
+          <span class="label-tag mono accent-violet"
+            >/ record{String(latest.record).padStart(2, "0")}</span
           >
         </p>
       </aside>
 
-      <section class="label-panel">
-        <div class="lead">
-          <p class="eyebrow label-tag accent-green">
-            record / {String(current.record).padStart(2, "0")}
-          </p>
-          <h1>{current.title}</h1>
-          <p class="summary">{current.summary}</p>
-        </div>
-
-        <div class="sheet">
-          <div class="spec-grid">
-            {
-              specRows.map((row) => (
-                <article
-                  class={row.span === "full" ? "is-contents" : undefined}
-                >
-                  <span class={`label-tag ${row.accent}`}>{row.key}</span>
-                  <strong>{row.value}</strong>
-                </article>
-              ))
-            }
-          </div>
-          <Barcode
-            value={current.hash}
-            height={44}
-            color="#0c2e25"
-            label={`${current.hash} · ${current.date}`}
-          />
-          <p class="caption">
-            每个 hex 字符映射为 4 模块条空，扫到的就是 hash 本身，不是它的 ASCII
-            渲染。
-          </p>
-        </div>
-      </section>
+      <div class="panel-stack">
+        {sessions.map((s) => <SessionPanel session={s} />)}
+      </div>
     </main>
   </body>
 </html>
@@ -185,19 +118,9 @@ const specRows: Array<{
     gap: 8px;
   }
 
-  .eyebrow {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--spine-text);
-  }
-
   .spine-title {
     writing-mode: vertical-rl;
     transform: rotate(180deg);
-    font-family: var(--font-mono);
     font-size: clamp(3.2rem, 13vw, 6.5rem);
     line-height: 0.86;
     letter-spacing: -0.12em;
@@ -221,116 +144,25 @@ const specRows: Array<{
     font-weight: 600;
   }
 
-  /* === label-panel ======================================== */
-  .label-panel {
-    padding: clamp(20px, 3vw, 36px);
+  /* === panel-stack ======================================== */
+  .panel-stack {
+    padding: clamp(20px, 3vw, 32px);
+
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
-    gap: clamp(16px, 3vw, 32px);
+    gap: clamp(20px, 3vw, 32px);
     border-top: 1px solid var(--line);
   }
 
-  .lead h1 {
-    margin: 14px 0 0;
-    font-family: var(--font-cn);
-    font-weight: 800;
-    font-size: clamp(2rem, 5.4vw, 3.6rem);
-    line-height: 1.05;
-    letter-spacing: -0.04em;
-    max-width: 16ch;
-  }
-
-  .summary {
-    max-width: 52ch;
-    margin: 18px 0 0;
-    font-family: var(--font-cn);
-    font-size: 1rem;
-    line-height: 1.8;
-    color: var(--text-dim);
-  }
-
-  .sheet {
-    display: grid;
-    gap: 14px;
-    align-content: start;
-  }
-
-  .spec-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .spec-grid article {
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid var(--line);
-    background: rgba(255, 255, 255, 0.025);
-  }
-
-  .spec-grid article.is-contents {
-    grid-column: 1 / -1;
-  }
-
-  .spec-grid article > span {
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  .spec-grid article strong {
-    display: block;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    line-height: 1.5;
-    color: var(--text);
-    word-break: break-all;
-  }
-
-  .caption {
-    margin: 0;
-    font-family: var(--font-cn);
-    font-size: 0.88rem;
-    line-height: 1.7;
-    color: var(--text-dim);
-  }
-
-  /* === label tags (CLI accents) =========================== */
-  .label-tag {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 1ch;
-    line-height: 1.4;
-  }
-
-  .accent-green {
-    background: #2ecc40;
-    color: #07150a;
-  }
-  .accent-cyan {
-    background: #00d7ff;
-    color: #061015;
-  }
-  .accent-amber {
-    background: #ffb000;
-    color: #140d00;
-  }
-  .accent-violet {
-    background: #af5eff;
-    color: #100516;
-  }
-
-  .sep {
-    font-family: var(--font-mono);
-    font-weight: 600;
-  }
-
   /* === responsive ========================================= */
-  @media (max-width: 960px) {
+  @media (min-width: 1080px) {
+    .panel-stack {
+      padding-right: 10vw;
+    }
+    .spine {
+      padding-left: 5vw;
+    }
+  }
+  @media (max-width: 640px) {
     .label-shell {
       grid-template-columns: 1fr;
     }
@@ -344,6 +176,7 @@ const specRows: Array<{
       flex-direction: row;
       align-items: center;
       gap: 12px;
+      min-width: 0;
     }
     .spine-accent-bar {
       height: 3px;
@@ -361,30 +194,20 @@ const specRows: Array<{
       align-items: center;
       row-gap: 4px;
       column-gap: 6px;
+      min-width: 0;
+      max-width: 100%;
     }
     .spine-foot br {
       display: none;
     }
-    .label-panel {
-      width: 100%;
-      grid-template-columns: 1fr;
-      padding: 20px 16px 40px;
+    .spine-foot .label-tag {
+      white-space: nowrap;
     }
-  }
 
-  @media (max-width: 720px) {
     .spine-foot {
       display: none;
     }
-
-    .spec-grid {
-      grid-template-columns: 1fr;
-    }
-    .lead h1 {
-      font-size: clamp(1.7rem, 9vw, 2.4rem);
-    }
   }
-
   @media (prefers-reduced-motion: reduce) {
     * {
       animation: none !important;

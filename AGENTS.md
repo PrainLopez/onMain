@@ -7,7 +7,7 @@
 # 当前结构
 
 - `src/pages/index.astro` 是当前首页主视觉，已被改造成偏实验性的定制版面，不要按默认博客首页理解。
-- `src/data/sessions.ts` 存放首页当前展示的数据源。
+- `src/data/sessions.ts` 存放博客数据源，为暂时的mock数据。
 - `src/components/`、`src/layouts/`、`src/assets/` 是当前 UI 和资源的主要承载区。
 
 # 需要注意
