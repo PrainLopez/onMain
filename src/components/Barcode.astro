@@ -4,112 +4,110 @@
 // the binary module stream recovers the hash itself, not an ASCII rendering.
 
 interface Props {
-	value: string;
-	height?: number;
-	moduleWidth?: number;
-	color?: string;
-	showText?: boolean;
-	label?: string;
+  value: string;
+  height?: number;
+  moduleWidth?: number;
+  color?: string;
+  showText?: boolean;
+  label?: string;
 }
 
 const {
-	value,
-	height = 44,
-	moduleWidth = 1.6,
-	color = "currentColor",
-	showText = true,
-	label,
+  value,
+  height = 44,
+  moduleWidth = 1.6,
+  color = "currentColor",
+  showText = true,
+  label
 } = Astro.props;
 
 const HEX_PATTERN: Record<string, string> = {
-	"0": "0000",
-	"1": "0001",
-	"2": "0010",
-	"3": "0011",
-	"4": "0100",
-	"5": "0101",
-	"6": "0110",
-	"7": "0111",
-	"8": "1000",
-	"9": "1001",
-	a: "1010",
-	b: "1011",
-	c: "1100",
-	d: "1101",
-	e: "1110",
-	f: "1111",
+  "0": "0000",
+  "1": "0001",
+  "2": "0010",
+  "3": "0011",
+  "4": "0100",
+  "5": "0101",
+  "6": "0110",
+  "7": "0111",
+  "8": "1000",
+  "9": "1001",
+  a: "1010",
+  b: "1011",
+  c: "1100",
+  d: "1101",
+  e: "1110",
+  f: "1111"
 };
 
 const clean = value.toLowerCase().replace(/[^0-9a-f]/g, "");
 if (clean.length === 0) {
-	throw new Error("Barcode: value must contain at least one hex character");
+  throw new Error("Barcode: value must contain at least one hex character");
 }
 
 const basePattern = clean
-	.split("")
-	.map((ch) => {
-		const p = HEX_PATTERN[ch];
-		if (!p) {
-			throw new Error(`Barcode: unsupported hex char '${ch}'`);
-		}
-		return p;
-	})
-	.join("");
+  .split("")
+  .map((ch) => {
+    const p = HEX_PATTERN[ch];
+    if (!p) {
+      throw new Error(`Barcode: unsupported hex char '${ch}'`);
+    }
+    return p;
+  })
+  .join("");
 
 const repeats = 3;
 const blockSeparator = "0";
 const fullPattern = Array.from({ length: repeats }, (_, i) =>
-	i === 0 ? basePattern : blockSeparator + basePattern,
+  i === 0 ? basePattern : blockSeparator + basePattern
 ).join("");
 
 const totalModules = fullPattern.length;
 const totalWidth = totalModules * moduleWidth;
 const text = label ?? value;
 ---
----
 
 <svg
-	class="barcode-svg"
-	role="img"
-	aria-label={`hex barcode of ${value}`}
-	viewBox={`0 0 ${totalWidth} ${height}`}
-	preserveAspectRatio="none"
-	xmlns="http://www.w3.org/2000/svg"
+  class="barcode-svg"
+  role="img"
+  aria-label={`hex barcode of ${value}`}
+  viewBox={`0 0 ${totalWidth} ${height}`}
+  preserveAspectRatio="none"
+  xmlns="http://www.w3.org/2000/svg"
 >
-	{
-		[...fullPattern].map((bit, i) =>
-			bit === "1" ? (
-				<rect
-					x={i * moduleWidth}
-					y="0"
-					width={moduleWidth}
-					height={height}
-					fill={color}
-				/>
-			) : null,
-		)
-	}
+  {
+    [...fullPattern].map((bit, i) =>
+      bit === "1" ? (
+        <rect
+          x={i * moduleWidth}
+          y="0"
+          width={moduleWidth}
+          height={height}
+          fill={color}
+        />
+      ) : null
+    )
+  }
 </svg>
-{showText && <span class="barcode-text mono"><span class="barcode-hash">{text}</span></span>}
 
 <style>
-	.barcode-svg {
-		display: block;
-		width: 100%;
-		height: 44px;
-	}
-	.barcode-text {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		margin-top: 6px;
-		font-family: var(--font-mono);
-		font-size: 0.72rem;
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-		color: rgba(238, 247, 241, 0.62);
-	}
-	.barcode-hash {
-		color: var(--text, #eef7f1);
-	}
+  .barcode-svg {
+    display: block;
+    width: 100%;
+    height: 44px;
+  }
+  .barcode-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(238, 247, 241, 0.62);
+  }
+  .barcode-hash {
+    color: var(--text, #eef7f1);
+  }
 </style>
