@@ -28,7 +28,7 @@ const latest = sessions.reduce((acc, s) => (s.date > acc.date ? s : acc));
           <span class="label-tag mono accent-amber">@ {latest.hash}</span>
           <br />
           <span class="label-tag mono accent-violet"
-            >/ record{String(latest.record).padStart(2, "0")}</span
+            >/ rec {String(latest.record).padStart(2, "0")}</span
           >
         </p>
       </aside>
@@ -162,7 +162,7 @@ const latest = sessions.reduce((acc, s) => (s.date > acc.date ? s : acc));
       padding-left: 5vw;
     }
   }
-  @media (max-width: 640px) {
+  @media (max-width: 720px) {
     .label-shell {
       grid-template-columns: 1fr;
     }

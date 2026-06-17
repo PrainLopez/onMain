@@ -3,6 +3,7 @@
 - 这是一个 Astro 项目，基于官方 Blog starter kit 起步。
 - 当前技术栈：Astro、MDX、RSS、Sitemap、Node 22.12+。
 - 站点配置在 `astro.config.mjs`，全局常量在 `src/consts.ts`。
+- 包管理使用 **pnpm**（仓库里有 `pnpm-lock.yaml`），不要混用 `npm` 或 `yarn`；安装/运行/发版统一用 `pnpm install` / `pnpm run ...`。
 
 # 当前结构
 
