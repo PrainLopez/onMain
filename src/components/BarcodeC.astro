@@ -1,5 +1,5 @@
 ---
-import { encodeCode128B } from "../lib/code128b";
+import { encodeCode128C } from "../lib/code128c";
 
 interface Props {
   value: string;
@@ -22,8 +22,8 @@ const {
 void showText;
 void label;
 
-const QUIET_ZONE_MODULES = 5;
-const moduleStream = encodeCode128B(value);
+const QUIET_ZONE_MODULES = 10;
+const moduleStream = encodeCode128C(value);
 const totalModules = moduleStream.length + 2 * QUIET_ZONE_MODULES;
 const totalWidth = totalModules * moduleWidth;
 const leftOffset = QUIET_ZONE_MODULES * moduleWidth;
