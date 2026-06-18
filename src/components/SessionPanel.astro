@@ -21,25 +21,25 @@ const specRows: SpecRow[] = [
   {
     key: "contents",
     value: session.topics.join(" / "),
-    accent: "accent-cyan",
+    accent: "cyan",
     span: "full"
   },
   {
     key: "branch",
     value: session.branch,
-    accent: "accent-green",
+    accent: "green",
     span: "cell"
   },
   {
     key: "hash",
     value: session.hash,
-    accent: "accent-amber",
+    accent: "amber",
     span: "cell"
   },
   {
     key: "record",
     value: String(session.record).padStart(2, "0"),
-    accent: "accent-violet",
+    accent: "violet",
     span: "cell"
   }
 ];
@@ -64,7 +64,9 @@ const specRows: SpecRow[] = [
       {
         specRows.map((row) => (
           <article class={row.span === "full" ? "is-contents" : undefined}>
-            <span class={`label-tag mono ${row.accent}`}>{row.key}</span>
+            <span class="label-tag mono" data-accent={row.accent}>
+              {row.key}
+            </span>
             <strong class="mono data">{row.value}</strong>
           </article>
         ))
@@ -164,12 +166,12 @@ const specRows: SpecRow[] = [
 
   .title-icon {
     position: absolute;
-    bottom: -24px;
-    left: -24px;
+    bottom: -30px;
+    left: -18px;
     width: 72px;
     height: 72px;
-    z-index: -1;
-    color: magenta;
+    z-index: 0;
+    color: var(--accent-violet);
   }
 
   .title-icon :global(svg) {
@@ -179,7 +181,7 @@ const specRows: SpecRow[] = [
   }
 
   .title-icon :global(path) {
-    stroke: magenta;
+    stroke: var(--accent-violet);
   }
 
   .summary {
@@ -271,5 +273,23 @@ const specRows: SpecRow[] = [
     .lead h1 {
       font-size: clamp(1.7rem, 9vw, 2.4rem);
     }
+  }
+
+  /* === accent chips (spec rows) ============================ */
+  [data-accent="green"] {
+    background: var(--accent-green);
+    color: var(--accent-green-fg);
+  }
+  [data-accent="cyan"] {
+    background: var(--accent-cyan);
+    color: var(--accent-cyan-fg);
+  }
+  [data-accent="amber"] {
+    background: var(--accent-amber);
+    color: var(--accent-amber-fg);
+  }
+  [data-accent="violet"] {
+    background: var(--accent-violet);
+    color: var(--accent-violet-fg);
   }
 </style>

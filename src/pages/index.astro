@@ -23,11 +23,14 @@ const latest = sessions.reduce((acc, s) => (s.date > acc.date ? s : acc));
         </div>
         <div class="spine-title mono">on_main</div>
         <p class="spine-foot mono">
-          <span class="label-tag mono accent-green">: {latest.branch}</span>
+          <span class="label-tag mono" data-accent="green"
+            >: {latest.branch}</span
+          >
           <br />
-          <span class="label-tag mono accent-amber">@ {latest.hash}</span>
+          <span class="label-tag mono" data-accent="amber">@ {latest.hash}</span
+          >
           <br />
-          <span class="label-tag mono accent-violet"
+          <span class="label-tag mono" data-accent="violet"
             >/ rec {String(latest.record).padStart(2, "0")}</span
           >
         </p>
@@ -214,5 +217,23 @@ const latest = sessions.reduce((acc, s) => (s.date > acc.date ? s : acc));
       animation: none !important;
       transition: none !important;
     }
+  }
+
+  /* === accent chips (spine) =============================== */
+  [data-accent="green"] {
+    background: var(--accent-green);
+    color: var(--accent-green-fg);
+  }
+  [data-accent="amber"] {
+    background: var(--accent-amber);
+    color: var(--accent-amber-fg);
+  }
+  [data-accent="violet"] {
+    background: var(--accent-violet);
+    color: var(--accent-violet-fg);
+  }
+  [data-accent="cyan"] {
+    background: var(--accent-cyan);
+    color: var(--accent-cyan-fg);
   }
 </style>
