@@ -148,7 +148,8 @@ const latest = sessions.reduce((acc, s) => (s.date > acc.date ? s : acc));
   .panel-stack {
     padding: clamp(20px, 3vw, 32px);
 
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: clamp(20px, 3vw, 32px);
     border-top: 1px solid var(--line);
   }
