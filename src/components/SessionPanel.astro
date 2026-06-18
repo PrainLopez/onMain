@@ -84,43 +84,6 @@ const specRows: SpecRow[] = [
 </section>
 
 <style>
-  /* === shared utility classes (spine 也命中) ============== */
-  :global(.eyebrow) {
-    margin: 0;
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--spine-text);
-  }
-
-  :global(.label-tag) {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 4px;
-    line-height: 1.4;
-  }
-
-  :global(.accent-green) {
-    background: #2ecc40;
-    color: #07150a;
-  }
-  :global(.accent-cyan) {
-    background: #00d7ff;
-    color: #061015;
-  }
-  :global(.accent-amber) {
-    background: #ffb000;
-    color: #140d00;
-  }
-  :global(.accent-violet) {
-    background: #af5eff;
-    color: #100516;
-  }
-
   /* === label-panel (scoped) =============================== */
   .label-panel {
     position: relative;
@@ -307,13 +270,6 @@ const specRows: SpecRow[] = [
   @media (max-width: 640px) {
     .lead h1 {
       font-size: clamp(1.7rem, 9vw, 2.4rem);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    :global(*) {
-      animation: none !important;
-      transition: none !important;
     }
   }
 </style>
