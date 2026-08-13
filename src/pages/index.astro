@@ -1,9 +1,25 @@
 ---
+import { getCollection } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
 import SessionPanel from "../components/SessionPanel.astro";
-import { sessions } from "../data/sessions";
 
-const latest = sessions.reduce((acc, s) => (s.date > acc.date ? s : acc));
+// Sort by date, newest first.
+const sessions = (await getCollection("session")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const latest = sessions[0]?.data;
+
+// Meta blocks shown in the spine footer, typed out left-to-right on load.
+const spineMeta = latest
+  ? [
+      { accent: "green", text: `: ${latest.branch}` },
+      { accent: "amber", text: `@ ${latest.hash}` },
+      {
+        accent: "violet",
+        text: `/ rec ${String(latest.record).padStart(2, "0")}`
+      }
+    ]
+  : [];
 ---
 
 <!doctype html>
@@ -22,22 +38,32 @@ const latest = sessions.reduce((acc, s) => (s.date > acc.date ? s : acc));
           <p class="eyebrow mono">Virtual Developer Meetup</p>
         </div>
         <div class="spine-title mono">on_main</div>
-        <p class="spine-foot mono">
-          <span class="label-tag mono" data-accent="green"
-            >: {latest.branch}</span
-          >
-          <br />
-          <span class="label-tag mono" data-accent="amber">@ {latest.hash}</span
-          >
-          <br />
-          <span class="label-tag mono" data-accent="violet"
-            >/ rec {String(latest.record).padStart(2, "0")}</span
-          >
-        </p>
+        {
+          spineMeta.length > 0 && (
+            <p class="spine-foot mono">
+              {spineMeta.map((meta, i) => (
+                <>
+                  <span
+                    class="label-tag mono typing"
+                    data-accent={meta.accent}
+                    style={`--chars: ${meta.text.length}; --delay: ${i * 0.75}s`}
+                  >
+                    {meta.text}
+                  </span>
+                  <br />
+                </>
+              ))}
+            </p>
+          )
+        }
       </aside>
 
       <div class="panel-stack">
-        {sessions.map((s) => <SessionPanel session={s} />)}
+        {
+          sessions.map((s, i) => (
+            <SessionPanel id={s.id} session={s.data} isLatest={i === 0} />
+          ))
+        }
       </div>
     </main>
   </body>
@@ -145,6 +171,28 @@ const latest = sessions.reduce((acc, s) => (s.date > acc.date ? s : acc));
     width: 1ch;
     color: var(--spine-text-dim);
     font-weight: 600;
+  }
+
+  /* typewriter: reveal text left-to-right, one block at a time */
+  .spine-foot .typing {
+    box-sizing: content-box;
+    overflow: hidden;
+    white-space: nowrap;
+    /* 1ch per glyph plus .label-tag's 0.14em letter-spacing */
+    max-width: calc(var(--chars) * (1ch + 0.14em));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .spine-foot .typing {
+      max-width: 0;
+      animation: typing 0.8s steps(var(--chars)) var(--delay) forwards;
+    }
+  }
+
+  @keyframes typing {
+    to {
+      max-width: calc(var(--chars) * (1ch + 0.14em));
+    }
   }
 
   /* === panel-stack ======================================== */

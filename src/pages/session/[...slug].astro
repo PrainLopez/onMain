@@ -1,0 +1,177 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+
+export async function getStaticPaths() {
+  const sessions = await getCollection("session");
+  return sessions.map((session) => ({
+    params: { slug: session.id },
+    props: { session }
+  }));
+}
+
+const { session } = Astro.props;
+const {
+  title,
+  summary,
+  date,
+  hash,
+  branch,
+  record,
+  speaker,
+  topics,
+  bilibili
+} = session.data;
+const { Content } = await render(session);
+
+const dateText = date.toISOString().slice(0, 10);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={`${title} / on_main`} description={summary} />
+  </head>
+  <body>
+    <main class="session-shell">
+      <header class="session-head">
+        <a class="back mono" href="/">← back</a>
+        <h1 class="title">{title}</h1>
+        <p class="meta mono">
+          <span>{dateText}</span>
+          <span>: {branch}</span>
+          <span>@ {hash}</span>
+          <span>/ rec {String(record).padStart(2, "0")}</span>
+          <span>by {speaker}</span>
+        </p>
+        <p class="topics mono">{topics.join(" / ")}</p>
+        {
+          bilibili && (
+            <a
+              class="bilibili mono"
+              href={bilibili}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ▶ 在 bilibili 观看回放
+            </a>
+          )
+        }
+      </header>
+      <article class="prose">
+        <Content />
+      </article>
+    </main>
+  </body>
+</html>
+
+<style>
+  :global(body) {
+    margin: 0;
+    background: #050a0d;
+    color: #eef7f1;
+    font-family:
+      "Noto Sans SC Variable", "Noto Sans SC", -apple-system, "PingFang SC",
+      "Microsoft YaHei", sans-serif;
+  }
+
+  .mono {
+    font-family:
+      "Space Mono", ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas,
+      monospace;
+  }
+
+  .session-shell {
+    width: min(760px, 100% - 2.5rem);
+    margin: 0 auto;
+    padding: clamp(28px, 6vw, 64px) 0 96px;
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: rgba(238, 247, 241, 0.6);
+    text-decoration: none;
+  }
+
+  .back:hover {
+    color: #eef7f1;
+  }
+
+  .title {
+    margin: 0 0 1rem;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    line-height: 1.15;
+    font-weight: 800;
+    color: #eef7f1;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    margin: 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: rgba(238, 247, 241, 0.55);
+  }
+
+  .topics {
+    margin: 0.75rem 0 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--accent-cyan, #57d9c7);
+  }
+
+  .bilibili {
+    display: inline-block;
+    margin-top: 1.25rem;
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: #eef7f1;
+    text-decoration: none;
+    transition:
+      border-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .bilibili:hover {
+    border-color: var(--accent-cyan, #57d9c7);
+    color: var(--accent-cyan, #57d9c7);
+  }
+
+  .prose {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    line-height: 1.9;
+    color: rgba(238, 247, 241, 0.82);
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 1em;
+  }
+
+  .prose :global(h2) {
+    margin: 2.2rem 0 0.8rem;
+    font-size: 1.3rem;
+    color: #eef7f1;
+  }
+
+  .prose :global(a) {
+    color: var(--accent-cyan, #57d9c7);
+  }
+
+  .prose :global(code) {
+    font-family:
+      "Space Mono", ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas,
+      monospace;
+    font-size: 0.9em;
+  }
+</style>

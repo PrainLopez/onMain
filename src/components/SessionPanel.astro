@@ -1,15 +1,19 @@
 ---
 import BarcodeC from "./Barcode.astro";
-import type { Session } from "../data/sessions";
+import type { CollectionEntry } from "astro:content";
 import signatureSvg from "../assets/image/signature-svgrepo-com.svg?raw";
 
+type Session = CollectionEntry<"session">["data"];
+
 interface Props {
+  id: string;
   session: Session;
+  isLatest?: boolean;
 }
 
-const { session } = Astro.props;
+const { id, session, isLatest = false } = Astro.props;
 
-type RowKey = keyof Pick<Session, "branch" | "hash"> | "record" | "contents";
+type RowKey = keyof Pick<Session, "branch" | "hash" | "speaker"> | "record";
 type SpecRow = {
   key: RowKey;
   value: string;
@@ -19,8 +23,8 @@ type SpecRow = {
 
 const specRows: SpecRow[] = [
   {
-    key: "contents",
-    value: session.topics.join(" / "),
+    key: "speaker",
+    value: session.speaker,
     accent: "cyan",
     span: "full"
   },
@@ -45,7 +49,7 @@ const specRows: SpecRow[] = [
 ];
 ---
 
-<section class="label-panel">
+<a class="label-panel" href={`/session/${id}/`}>
   <span class="corner tl" aria-hidden="true"></span>
   <span class="corner tr" aria-hidden="true"></span>
   <span class="corner bl" aria-hidden="true"></span>
@@ -53,7 +57,11 @@ const specRows: SpecRow[] = [
 
   <div class="lead">
     <h1 class="title">
-      <span class="title-icon" aria-hidden="true" set:html={signatureSvg} />
+      {
+        isLatest && (
+          <span class="title-icon" aria-hidden="true" set:html={signatureSvg} />
+        )
+      }
       {session.title}
     </h1>
     <p class="summary">{session.summary}</p>
@@ -63,7 +71,7 @@ const specRows: SpecRow[] = [
     <div class="spec-grid">
       {
         specRows.map((row) => (
-          <article class={row.span === "full" ? "is-contents" : undefined}>
+          <article class={row.span === "full" ? "is-full" : undefined}>
             <span class="label-tag mono" data-accent={row.accent}>
               {row.key}
             </span>
@@ -79,23 +87,60 @@ const specRows: SpecRow[] = [
       value={session.hash}
       height={44}
       color="#0c2e25"
-      label={`${session.hash} · ${session.date}`}
+      label={`${session.hash} · ${session.date.toISOString().slice(0, 10)}`}
       vertical
     />
   </div>
-</section>
+</a>
 
 <style>
   /* === label-panel (scoped) =============================== */
   .label-panel {
     position: relative;
     isolation: isolate;
-    padding: clamp(24px, 3vw, 40px);
     display: grid;
+    color: inherit;
+    text-decoration: none;
+    /* Lazy-render offscreen cards; browser skips layout/paint until near viewport. */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 480px;
+    padding: clamp(24px, 3vw, 40px);
     grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
     gap: clamp(16px, 3vw, 32px);
     border: 1px solid var(--line);
     background: var(--bg);
+    transition: box-shadow 0.6s ease;
+  }
+
+  .label-panel:hover {
+    box-shadow:
+      0 16px 44px rgba(175, 94, 255, 0.3),
+      0 0 28px rgba(0, 215, 255, 0.14);
+  }
+
+  /* entrance animation: plays on scroll into view when supported */
+  @media (prefers-reduced-motion: no-preference) {
+    .label-panel {
+      animation: panel-enter 0.7s ease both;
+    }
+    @supports (animation-timeline: view()) {
+      .label-panel {
+        animation: panel-enter 0.7s ease both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 60%;
+      }
+    }
+  }
+
+  @keyframes panel-enter {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   /* corner cut marks (printing trim guides) */
@@ -235,7 +280,7 @@ const specRows: SpecRow[] = [
     background: rgba(255, 255, 255, 0.025);
   }
 
-  .spec-grid article.is-contents {
+  .spec-grid article.is-full {
     grid-column: 1 / -1;
   }
 
