@@ -9,14 +9,15 @@ const sessions = (await getCollection("session")).sort(
 );
 const latest = sessions[0]?.data;
 
-// Meta blocks shown in the spine footer, typed out left-to-right on load.
+// Meta blocks shown in the spine footer, revealed with a scramble effect on load.
 const spineMeta = latest
   ? [
-      { accent: "green", text: `: ${latest.branch}` },
-      { accent: "amber", text: `@ ${latest.hash}` },
+      { accent: "green", head: ":", text: `${latest.branch}` },
+      { accent: "amber", head: "@", text: `${latest.hash}` },
       {
         accent: "violet",
-        text: `/ rec ${String(latest.record).padStart(2, "0")}`
+        head: "/",
+        text: `rec ${String(latest.record).padStart(2, "0")}`
       }
     ]
   : [];
@@ -41,12 +42,14 @@ const spineMeta = latest
         {
           spineMeta.length > 0 && (
             <p class="spine-foot mono">
-              {spineMeta.map((meta, i) => (
+              {spineMeta.map((meta) => (
                 <>
+                  <span class="label-tag mono" data-accent={meta.accent}>
+                    {meta.head}
+                  </span>
                   <span
-                    class="label-tag mono typing"
+                    class="label-tag mono scramble"
                     data-accent={meta.accent}
-                    style={`--chars: ${meta.text.length}; --delay: ${i * 0.75}s`}
                   >
                     {meta.text}
                   </span>
@@ -66,6 +69,10 @@ const spineMeta = latest
         }
       </div>
     </main>
+
+    <script>
+      import "../scripts/home-animations";
+    </script>
   </body>
 </html>
 
@@ -171,28 +178,6 @@ const spineMeta = latest
     width: 1ch;
     color: var(--spine-text-dim);
     font-weight: 600;
-  }
-
-  /* typewriter: reveal text left-to-right, one block at a time */
-  .spine-foot .typing {
-    box-sizing: content-box;
-    overflow: hidden;
-    white-space: nowrap;
-    /* 1ch per glyph plus .label-tag's 0.14em letter-spacing */
-    max-width: calc(var(--chars) * (1ch + 0.14em));
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .spine-foot .typing {
-      max-width: 0;
-      animation: typing 0.8s steps(var(--chars)) var(--delay) forwards;
-    }
-  }
-
-  @keyframes typing {
-    to {
-      max-width: calc(var(--chars) * (1ch + 0.14em));
-    }
   }
 
   /* === panel-stack ======================================== */

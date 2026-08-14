@@ -25,6 +25,8 @@ summary: 一句话摘要，显示在首页卡片上。
 
 首页按 `date` 倒序自动列出所有分享，详情页路径为 `/session/<文件名>/`。
 
+首页动效由 `src/scripts/home-animations.ts` 提供（基于 anime.js，仅首页加载），是渐进增强：无 JS / reduced-motion 时由纯 CSS 动效兜底。
+
 ## 常用命令
 
 ```sh

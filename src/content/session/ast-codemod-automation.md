@@ -10,7 +10,7 @@ topics:
   - codemod
   - refactor
 summary: 大规模重构不该靠手改。用 AST 描述代码结构，用 codemod 把重复修改变成一次可 Review 的脚本。
-bilibili: https://www.bilibili.com/video/BV1onmain0801
+bilibili: https://b23.tv/XheV1YU
 ---
 
 ## 议题背景

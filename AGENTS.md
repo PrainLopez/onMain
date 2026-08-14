@@ -13,6 +13,7 @@
 - `src/content/session/` 是内容源：每篇分享一个 `.md` 文件，frontmatter 存元数据（`hash/date/record/branch/title/speaker/topics/summary`），正文是分享内容。schema 定义在 `src/content.config.ts`。
 - `src/components/SessionPanel.astro` 是首页卡片组件，整卡可点击跳转详情页，用 `content-visibility: auto` 做离屏懒渲染。
 - `src/components/BaseHead.astro` 负责全局 `<head>`（含字体加载），`src/styles/global.css` 只保留 CSS reset、accent 令牌和 label 工具类。
+- `src/scripts/home-animations.ts` 是首页动效模块，基于 anime.js，仅首页加载（spine meta scramble 文字、签名描边、spec 行交错入场），无 JS / reduced-motion 时内容静态可见，其余纯 CSS 动效兜底。
 
 # 约定
 

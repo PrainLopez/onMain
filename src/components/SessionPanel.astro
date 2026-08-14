@@ -84,8 +84,8 @@ const specRows: SpecRow[] = [
 
   <div class="barcode-strip" aria-hidden="true">
     <BarcodeC
-      value={session.hash}
-      height={44}
+      value={session.bilibili || session.hash}
+      height={55}
       color="#0c2e25"
       label={`${session.hash} · ${session.date.toISOString().slice(0, 10)}`}
       vertical
@@ -261,7 +261,7 @@ const specRows: SpecRow[] = [
     z-index: 0;
     top: clamp(24px, 3vw, 40px);
     right: 0;
-    width: clamp(15px, 2.5vw, 36px);
+    width: clamp(25px, 2.5vw, 35px);
     pointer-events: none;
     overflow: hidden;
   }
