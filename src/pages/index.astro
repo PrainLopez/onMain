@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
 import SessionPanel from "../components/SessionPanel.astro";
+import SlicedWaves from "../components/SlicedWaves.astro";
 
 // Sort by date, newest first.
 const sessions = (await getCollection("session")).sort(
@@ -32,6 +33,7 @@ const spineMeta = latest
     />
   </head>
   <body class="prototype-label">
+    <SlicedWaves />
     <main class="label-shell">
       <aside class="spine" aria-label="spine">
         <div class="spine-accent-bar" aria-hidden="true"></div>
