@@ -1,6 +1,7 @@
 ---
 import BarcodeC from "./Barcode.astro";
 import type { CollectionEntry } from "astro:content";
+import { CARD_LINKS_TO_BILIBILI } from "../consts";
 import signatureSvg from "../assets/image/signature-svgrepo-com.svg?raw";
 
 type Session = CollectionEntry<"session">["data"];
@@ -12,6 +13,9 @@ interface Props {
 }
 
 const { id, session, isLatest = false } = Astro.props;
+
+const toBilibili = CARD_LINKS_TO_BILIBILI && !!session.bilibili;
+const href = toBilibili ? session.bilibili! : `/session/${id}/`;
 
 type RowKey = keyof Pick<Session, "branch" | "hash" | "speaker"> | "record";
 type SpecRow = {
@@ -49,7 +53,11 @@ const specRows: SpecRow[] = [
 ];
 ---
 
-<a class="label-panel" href={`/session/${id}/`}>
+<a
+  class="label-panel"
+  href={href}
+  {...toBilibili ? { target: "_blank", rel: "noopener noreferrer" } : {}}
+>
   <span class="corner tl" aria-hidden="true"></span>
   <span class="corner tr" aria-hidden="true"></span>
   <span class="corner bl" aria-hidden="true"></span>
