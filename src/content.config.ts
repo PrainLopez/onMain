@@ -7,7 +7,8 @@ const session = defineCollection({
 	loader: glob({ base: './src/content/session', pattern: '**/*.{md,mdx}' }),
 	// Session metadata shown on the index cards and detail pages.
 	schema: z.object({
-		hash: z.string(),
+		// branch 内序号；展示用的 hash 由 branch + commit 计算得出（见 src/lib/session-hash.ts）。
+		commit: z.number().int().nonnegative(),
 		date: z.coerce.date(),
 		record: z.number().int().nonnegative(),
 		branch: z.string(),

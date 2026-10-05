@@ -63,6 +63,35 @@ if (!reduced) {
     });
   });
 
+  // 4. hash 格 hover：尾码 scramble 成十进制 commit（前导空格右对齐），移出后反转动画还原
+  document.querySelectorAll<HTMLElement>(".hash-tail").forEach((el) => {
+    const hex = el.dataset.hex ?? "";
+    const dec = (el.dataset.dec ?? "").padStart(hex.length, " ");
+    const cell = el.closest("article");
+    if (!cell) return;
+    // anime v4 会把含数字的 innerHTML 拆成「数字 + 文本」分段补间，直接动画 innerHTML
+    // 会让 scramble 只替换数字段、残留后缀字符；改为补间代理对象，手动写 textContent。
+    const tween = text.scrambleText({
+      text: dec,
+      chars: "0-9A-F",
+      override: false,
+      cursor: "█",
+      revealRate: 15
+    })(el, 0, [el], null);
+    const host = { p: 0 };
+    const anim = animate(host, {
+      p: [0, 1],
+      duration: tween.duration,
+      ease: "linear",
+      autoplay: false,
+      onUpdate: () => {
+        el.textContent = tween.modifier(host.p);
+      }
+    });
+    cell.addEventListener("mouseenter", () => anim.play());
+    cell.addEventListener("mouseleave", () => anim.reverse());
+  });
+
   // 3. p.eyebrow scramble 揭示
   const eyebrow = document.querySelector<HTMLElement>(".eyebrow");
   onFirstVisible(eyebrow, () => {

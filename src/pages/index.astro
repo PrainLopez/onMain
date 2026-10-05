@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
 import SessionPanel from "../components/SessionPanel.astro";
 import SlicedWaves from "../components/SlicedWaves.astro";
+import { sessionHash } from "../lib/session-hash";
 
 // Sort by date, newest first.
 const sessions = (await getCollection("session")).sort(
@@ -14,7 +15,11 @@ const latest = sessions[0]?.data;
 const spineMeta = latest
   ? [
       { accent: "green", head: ":", text: `${latest.branch}` },
-      { accent: "amber", head: "@", text: `${latest.hash}` },
+      {
+        accent: "amber",
+        head: "@",
+        text: sessionHash(latest.branch, latest.commit)
+      },
       {
         accent: "violet",
         head: "/",

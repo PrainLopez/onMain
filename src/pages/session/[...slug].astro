@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import BaseHead from "../../components/BaseHead.astro";
 import SlicedWaves from "../../components/SlicedWaves.astro";
+import { sessionHash } from "../../lib/session-hash";
 
 export async function getStaticPaths() {
   const sessions = await getCollection("session");
@@ -16,7 +17,7 @@ const {
   title,
   summary,
   date,
-  hash,
+  commit,
   branch,
   record,
   speaker,
@@ -25,6 +26,7 @@ const {
 } = session.data;
 const { Content } = await render(session);
 
+const hash = sessionHash(branch, commit);
 const dateText = date.toISOString().slice(0, 10);
 ---
 

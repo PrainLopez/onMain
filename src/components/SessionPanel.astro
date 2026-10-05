@@ -2,6 +2,7 @@
 import BarcodeC from "./Barcode.astro";
 import type { CollectionEntry } from "astro:content";
 import { CARD_LINKS_TO_BILIBILI } from "../consts";
+import { sessionHash } from "../lib/session-hash";
 import signatureSvg from "../assets/image/signature-svgrepo-com.svg?raw";
 
 type Session = CollectionEntry<"session">["data"];
@@ -17,7 +18,12 @@ const { id, session, isLatest = false } = Astro.props;
 const toBilibili = CARD_LINKS_TO_BILIBILI && !!session.bilibili;
 const href = toBilibili ? session.bilibili! : `/session/${id}/`;
 
-type RowKey = keyof Pick<Session, "branch" | "hash" | "speaker"> | "record";
+// hash 由 branch + commit 计算得出：前两位是 branch 前缀，后五位映射自 commit。
+const hash = sessionHash(session.branch, session.commit);
+const hashPrefix = hash.slice(0, 2);
+const hashTail = hash.slice(2);
+
+type RowKey = "branch" | "hash" | "speaker" | "record";
 type SpecRow = {
   key: RowKey;
   value: string;
@@ -40,7 +46,7 @@ const specRows: SpecRow[] = [
   },
   {
     key: "hash",
-    value: session.hash,
+    value: hash,
     accent: "amber",
     span: "cell"
   },
@@ -79,11 +85,29 @@ const specRows: SpecRow[] = [
     <div class="spec-grid">
       {
         specRows.map((row) => (
-          <article class={row.span === "full" ? "is-full" : undefined}>
+          <article
+            class:list={[
+              row.span === "full" && "is-full",
+              row.key === "hash" && "hash-cell"
+            ]}
+          >
             <span class="label-tag mono" data-accent={row.accent}>
               {row.key}
             </span>
-            <strong class="mono data">{row.value}</strong>
+            {row.key === "hash" ? (
+              <strong class="mono data hash-value">
+                <span class="hash-branch">{hashPrefix}</span>
+                <span
+                  class="hash-tail"
+                  data-hex={hashTail}
+                  data-dec={String(session.commit).padStart(2, "0")}
+                >
+                  {hashTail}
+                </span>
+              </strong>
+            ) : (
+              <strong class="mono data">{row.value}</strong>
+            )}
           </article>
         ))
       }
@@ -92,10 +116,10 @@ const specRows: SpecRow[] = [
 
   <div class="barcode-strip" aria-hidden="true">
     <BarcodeC
-      value={`:${session.branch}@${session.hash}`}
+      value={`:${session.branch}@${hash}`}
       height={55}
       color="#0c2e25"
-      label={`${session.hash} · ${session.date.toISOString().slice(0, 10)}`}
+      label={`${hash} · ${session.date.toISOString().slice(0, 10)}`}
       vertical
     />
   </div>
@@ -303,6 +327,20 @@ const specRows: SpecRow[] = [
     line-height: 1.5;
     color: var(--text);
     word-break: break-all;
+  }
+
+  /* hash 格 hover：branch 前缀变为 branch 行的绿色；尾码由 JS scramble 成十进制 commit */
+  .hash-cell .hash-branch {
+    transition: color 0.25s ease;
+  }
+
+  .hash-cell:hover .hash-branch {
+    color: var(--accent-green);
+  }
+
+  /* 十进制 commit 用前导空格右对齐到 5 位宽度，保留空格渲染 */
+  .hash-tail {
+    white-space: pre;
   }
 
   .caption {

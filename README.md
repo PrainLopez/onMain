@@ -8,7 +8,7 @@
 
 ```md
 ---
-hash: c47d57a
+commit: 7
 date: 2026-06-15
 record: 7
 branch: main
@@ -22,6 +22,10 @@ summary: 一句话摘要，显示在首页卡片上。
 
 正文（Markdown）。
 ```
+
+`commit` 是该分享在 branch 内的序号（从 0 开始）。卡片上展示的 7 位 hash 由 `branch + commit`
+计算得出（`src/lib/session-hash.ts`）：前两位是 branch 前缀（`main` → `9E`，`conflict` → `FF`），
+后五位是 commit 经线性同余映射后的十六进制尾码。
 
 首页按 `date` 倒序自动列出所有分享，详情页路径为 `/session/<文件名>/`。
 

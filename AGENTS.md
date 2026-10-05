@@ -10,7 +10,7 @@
 - `src/pages/index.astro` 是首页，按日期倒序（新的在前）列出所有分享卡片，不要按默认博客首页理解。
 - `src/pages/session/[...slug].astro` 是分享详情页，渲染对应 MD 正文。
 - `src/pages/rss.xml.js` 基于 session 集合输出 RSS。
-- `src/content/session/` 是内容源：每篇分享一个 `.md` 文件，frontmatter 存元数据（`hash/date/record/branch/title/speaker/topics/summary`），正文是分享内容。schema 定义在 `src/content.config.ts`。
+- `src/content/session/` 是内容源：每篇分享一个 `.md` 文件，frontmatter 存元数据（`commit/date/record/branch/title/speaker/topics/summary`），正文是分享内容。schema 定义在 `src/content.config.ts`。展示用的 7 位 hash 由 `branch + commit` 经 `src/lib/session-hash.ts` 计算得出（branch 前缀：`main`→`9E`、`conflict`→`FF`；后五位是 commit 的线性同余映射，与 atMainHex.js 同算法）。
 - `src/components/SessionPanel.astro` 是首页卡片组件，整卡可点击跳转详情页，用 `content-visibility: auto` 做离屏懒渲染。
 - `src/components/BaseHead.astro` 负责全局 `<head>`（含字体加载），`src/styles/global.css` 只保留 CSS reset、accent 令牌和 label 工具类。
 - `src/components/SlicedWaves.astro` 是全站动态背景（React Bits SlicedWaves 的原生 WebGL2 移植，基于 ogl），以 `position: fixed` 挂在首页和详情页内容层下方；三个颜色直接读取 global.css 的 `--accent-green/amber/violet` 令牌，无 WebGL2 时透明降级，reduced-motion 时只渲染静态帧。
