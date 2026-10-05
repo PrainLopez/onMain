@@ -36,3 +36,11 @@ pnpm install
 pnpm run dev
 pnpm run build
 ```
+
+## 部署（Cloudflare）
+
+站点是纯静态构建（`astro.config.mjs` 里 `output: 'static'`，产物为 `dist/`）。在 Cloudflare 上按静态站点配置即可：
+
+- Build command: `pnpm run build`
+- Build output directory: `dist`
+- Deploy command: 留空。Cloudflare 自动检测会把 Astro 误判为 Worker 部署并填入 `wrangler deploy`，静态站点不需要它——构建完成后 `dist/` 会作为静态资产直接托管。

@@ -20,6 +20,7 @@
 
 - 新增分享 = 在 `src/content/session/` 加一个 md 文件，无需改动任何代码；字段格式见 `README.md`。
 - 卡片与详情页的暗色视觉（`#050a0d` 底 + accent 标签色）是站点的正式风格，改动样式时保持克制。
+- 站点是纯静态构建（`output: 'static'`），部署到 Cloudflare 时 build 输出 `dist/`，不需要 deploy 命令（不要引入 wrangler / `@astrojs/cloudflare`）。
 
 # 工作原则
 
