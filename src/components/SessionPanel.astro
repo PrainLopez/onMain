@@ -84,7 +84,7 @@ const specRows: SpecRow[] = [
 
   <div class="barcode-strip" aria-hidden="true">
     <BarcodeC
-      value={session.bilibili || session.hash}
+      value={`:${session.branch}@${session.hash}`}
       height={55}
       color="#0c2e25"
       label={`${session.hash} · ${session.date.toISOString().slice(0, 10)}`}
@@ -186,7 +186,7 @@ const specRows: SpecRow[] = [
     margin: 14px 0 0;
     font-family: var(--font-cn);
     font-weight: 800;
-    font-size: clamp(2rem, 5.4vw, 3.6rem);
+    font-size: clamp(2rem, 5vw, 3rem);
     line-height: 1.05;
     letter-spacing: -0.04em;
     max-width: 16ch;
@@ -205,7 +205,6 @@ const specRows: SpecRow[] = [
     position: relative;
     font-family: var(--font-cn);
     font-weight: 800;
-    font-size: clamp(2rem, 5.4vw, 3.6rem);
     line-height: 1.05;
     color: var(--text);
   }
@@ -260,7 +259,7 @@ const specRows: SpecRow[] = [
   .barcode-strip {
     position: absolute;
     z-index: 0;
-    top: clamp(24px, 3vw, 40px);
+    top: 36px;
     right: 0;
     width: clamp(25px, 2.5vw, 35px);
     pointer-events: none;
@@ -312,12 +311,6 @@ const specRows: SpecRow[] = [
       width: 100%;
       grid-template-columns: 1fr;
       padding: 20px 16px 40px;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .lead h1 {
-      font-size: clamp(1.7rem, 9vw, 2.4rem);
     }
   }
 
