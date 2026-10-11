@@ -26,6 +26,11 @@
     mouseRadius: 0.25
   };
 
+  // 波形以 shader 里的归一化网格（columns × rows）为基准，单元格像素尺寸会随视口缩放。
+  // 为了让条块在不同视口下保持一致的尺寸，这里用绝对像素定义单元格宽高，
+  // 再按实际容器尺寸反推列/行数（数值取自桌面参考视口 1440×900 下的 26×10 网格）。
+  const CELL_SIZE = { width: 56, height: 90 };
+
   const hexToRgb = (hex: string): [number, number, number] => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (!result) return [1, 1, 1];
@@ -223,6 +228,15 @@ void main() {
       const w = Math.max(1, Math.floor(rect.width));
       const h = Math.max(1, Math.floor(rect.height));
       renderer.setSize(w, h);
+      // 用绝对像素单元格宽高反推网格数，条块尺寸不随视口变化。
+      program.uniforms.uColumns.value = Math.max(
+        1,
+        Math.round(w / CELL_SIZE.width)
+      );
+      program.uniforms.uRows.value = Math.max(
+        1,
+        Math.round(h / CELL_SIZE.height)
+      );
       const res = program.uniforms.iResolution.value as Float32Array;
       res[0] = gl.drawingBufferWidth;
       res[1] = gl.drawingBufferHeight;
