@@ -353,7 +353,7 @@ export function Settle({ tokens, className = "", static: isStatic = false, ambie
 								if (!rects.current[i]) rects.current[i] = []
 								rects.current[i]![j] = el
 							}}
-							data-band={i % 4}
+							data-band={((i - j) % 4 + 4) % 4}
 							x={x}
 							y={top}
 							width={barWidth}
