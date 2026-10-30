@@ -2,9 +2,10 @@
 import { Settle } from "./textures/settle";
 ---
 
-<div class="settle-background" data-motion="pointer" aria-hidden="true">
+<div class="settle-background" data-motion="ambient" aria-hidden="true">
   <Settle
     client:load
+    ambientSpeed={0.2}
     tokens={{
       "--texture-ink": "var(--accent-green)",
       "--texture-field": "#050a0d"
@@ -56,6 +57,7 @@ import { Settle } from "./textures/settle";
 
   .settle-background :global(svg) {
     opacity: 0.1;
+    filter: blur(3px);
   }
 
   .settle-background :global(rect[data-band="0"]) {

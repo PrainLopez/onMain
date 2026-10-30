@@ -229,6 +229,7 @@ export type SettleProps = {
 	tokens?: Partial<Record<"--texture-ink" | "--texture-field", string>>
 	className?: string
 	static?: boolean
+ 	ambientSpeed?: number
 }
 const GAP = BAR_H + 2
 const SIGMA_X = 90
@@ -237,7 +238,7 @@ const PULL = 0.85
 const EASE = 0.32
 const TARGET_COLUMN_WIDTH = 96
 const COLUMN_FILL = BAR_W / 35.04
-export function Settle({ tokens, className = "", static: isStatic = false }: SettleProps) {
+export function Settle({ tokens, className = "", static: isStatic = false, ambientSpeed = 1 }: SettleProps) {
 	const ref = useRef<HTMLDivElement>(null)
 	useEffect(() => selfSize(ref.current), [])
 	const [layout, setLayout] = useState({ width: W, count: COLS.length })
@@ -310,7 +311,7 @@ export function Settle({ tokens, className = "", static: isStatic = false }: Set
 				return moving
 			},
 			[160, 112],
-			{ width: layout.width, height: H },
+			{ width: layout.width, height: H, ambientSpeed },
 		)
 	}, [isStatic, columns, barWidth, layout.width])
 	const style = {

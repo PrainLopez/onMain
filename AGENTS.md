@@ -13,7 +13,7 @@
 - `src/content/session/` 是内容源：每篇分享一个 `.md` 文件，frontmatter 存元数据（`commit/date/record/branch/title/speaker/topics/summary`），正文是分享内容。schema 定义在 `src/content.config.ts`。展示用的 7 位 hash 由 `branch + commit` 经 `src/lib/session-hash.ts` 计算得出（branch 前缀：`main`→`9E`、`conflict`→`FF`；后五位是 commit 的线性同余映射，与 atMainHex.js 同算法）。
 - `src/components/SessionPanel.astro` 是首页卡片组件，整卡可点击跳转详情页，用 `content-visibility: auto` 做离屏懒渲染。
 - `src/components/BaseHead.astro` 负责全局 `<head>`（含字体加载），`src/styles/global.css` 只保留 CSS reset、accent 令牌和 label 工具类。
-- `src/components/SettleBackground.astro` 是全站动态背景，挂载 `src/components/textures/settle.tsx` 的 Textures Settle React 组件，以 `position: fixed` 挂在首页和详情页内容层下方；条块按视口宽度自动增减并保持等宽，循环使用 global.css 的 `--accent-green/cyan/amber/violet` 令牌，由鼠标位置驱动，无鼠标交互时静止，reduced-motion 时只渲染静态帧。
+- `src/components/SettleBackground.astro` 是全站动态背景，挂载 `src/components/textures/settle.tsx` 的 Textures Settle React 组件，以 `position: fixed` 挂在首页和详情页内容层下方；条块按视口宽度自动增减并保持等宽，循环使用 global.css 的 `--accent-green/cyan/amber/violet` 令牌，默认运行缓慢的自动动效（ambientSpeed 0.25）并响应鼠标位置，reduced-motion 时只渲染静态帧。
 - `src/scripts/home-animations.ts` 是首页动效模块，基于 anime.js，仅首页加载（spine meta scramble 文字、签名描边、spec 行交错入场），无 JS / reduced-motion 时内容静态可见，其余纯 CSS 动效兜底。
 
 # 约定
