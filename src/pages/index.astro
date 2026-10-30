@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
 import SessionPanel from "../components/SessionPanel.astro";
-import SlicedWaves from "../components/SlicedWaves.astro";
+import SettleBackground from "../components/SettleBackground.astro";
 import { sessionHash } from "../lib/session-hash";
 
 // Sort by date, newest first.
@@ -38,7 +38,7 @@ const spineMeta = latest
     />
   </head>
   <body class="prototype-label">
-    <SlicedWaves />
+    <SettleBackground />
     <main class="label-shell">
       <aside class="spine" aria-label="spine">
         <div class="spine-accent-bar" aria-hidden="true"></div>

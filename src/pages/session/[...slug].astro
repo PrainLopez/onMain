@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseHead from "../../components/BaseHead.astro";
-import SlicedWaves from "../../components/SlicedWaves.astro";
+import SettleBackground from "../../components/SettleBackground.astro";
 import { sessionHash } from "../../lib/session-hash";
 
 export async function getStaticPaths() {
@@ -36,7 +36,7 @@ const dateText = date.toISOString().slice(0, 10);
     <BaseHead title={`${title} / on_main`} description={summary} />
   </head>
   <body>
-    <SlicedWaves />
+    <SettleBackground />
     <main class="session-shell">
       <header class="session-head">
         <a class="back mono" href="/">← back</a>

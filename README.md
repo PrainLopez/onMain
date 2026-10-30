@@ -31,7 +31,7 @@ summary: 一句话摘要，显示在首页卡片上。
 
 首页动效由 `src/scripts/home-animations.ts` 提供（基于 anime.js，仅首页加载），是渐进增强：无 JS / reduced-motion 时由纯 CSS 动效兜底。
 
-站点动态背景由 `src/components/SlicedWaves.astro` 提供（React Bits SlicedWaves 的 WebGL2 移植，基于 ogl），挂在首页与详情页内容层下方，配色取全局 `--accent-green/amber/violet` 令牌；无 WebGL2 / reduced-motion 时自动降级为纯色底。
+站点动态背景由 `src/components/SettleBackground.astro` 提供，使用 `src/components/textures/settle.tsx` 的 Textures Settle React 组件，挂在首页与详情页内容层下方。条块按视口宽度自动增减并保持等宽，循环使用全局 `--accent-green/cyan/amber/violet` 令牌，由鼠标位置驱动，无鼠标交互时静止，reduced-motion 时显示静态帧。
 
 ## 常用命令
 

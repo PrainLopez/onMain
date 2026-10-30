@@ -1,0 +1,76 @@
+---
+import { Settle } from "./textures/settle";
+---
+
+<div class="settle-background" data-motion="pointer" aria-hidden="true">
+  <Settle
+    client:load
+    tokens={{
+      "--texture-ink": "var(--accent-green)",
+      "--texture-field": "#050a0d"
+    }}
+  />
+</div>
+
+<script>
+  const settle = document.querySelector<HTMLElement>(
+    '.settle-background [data-texture="settle"]'
+  );
+
+  if (settle) {
+    // The background stays click-through; forward desktop pointer positions
+    // so Settle can react even while the cursor is over page content.
+    window.addEventListener(
+      "pointermove",
+      (event) => {
+        if (event.pointerType === "touch") return;
+        settle.dispatchEvent(
+          new PointerEvent("pointermove", {
+            clientX: event.clientX,
+            clientY: event.clientY,
+            pointerType: event.pointerType
+          })
+        );
+      },
+      { passive: true }
+    );
+
+    const release = () => {
+      settle.dispatchEvent(
+        new PointerEvent("pointerleave", { pointerType: "mouse" })
+      );
+    };
+    document.documentElement.addEventListener("pointerleave", release);
+    window.addEventListener("blur", release);
+  }
+</script>
+
+<style>
+  .settle-background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .settle-background :global(svg) {
+    opacity: 0.1;
+  }
+
+  .settle-background :global(rect[data-band="0"]) {
+    fill: var(--accent-green);
+  }
+
+  .settle-background :global(rect[data-band="1"]) {
+    fill: var(--accent-cyan);
+  }
+
+  .settle-background :global(rect[data-band="2"]) {
+    fill: var(--accent-amber);
+  }
+
+  .settle-background :global(rect[data-band="3"]) {
+    fill: var(--accent-violet);
+  }
+</style>
