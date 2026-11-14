@@ -133,9 +133,6 @@ const specRows: SpecRow[] = [
     display: grid;
     color: inherit;
     text-decoration: none;
-    /* Lazy-render offscreen cards; browser skips layout/paint until near viewport. */
-    content-visibility: auto;
-    contain-intrinsic-size: auto 480px;
     padding: clamp(24px, 3vw, 40px);
     grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
     gap: clamp(16px, 3vw, 32px);
