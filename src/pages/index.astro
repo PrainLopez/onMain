@@ -42,28 +42,33 @@ const spineMeta = latest
     <main class="label-shell">
       <aside class="spine" aria-label="spine">
         <div class="spine-accent-bar" aria-hidden="true"></div>
+        <div class="spine-heading">
+          <p class="spine-mobile-eyebrow eyebrow mono">Virtual Developer Meetup</p>
+          <div class="spine-title" data-text="on_main">on_main</div>
+        </div>
         <div class="spine-top">
           <p class="eyebrow mono">Virtual Developer Meetup</p>
+          <span class="spine-registration" aria-hidden="true"></span>
         </div>
-        <div class="spine-title mono">on_main</div>
         {
           spineMeta.length > 0 && (
-            <p class="spine-foot mono">
-              {spineMeta.map((meta) => (
-                <>
-                  <span class="label-tag mono" data-accent={meta.accent}>
-                    {meta.head}
+            <div class="spine-bottom">
+              <p class="spine-foot mono">
+                {spineMeta.map((meta) => (
+                  <span class="spine-meta-row">
+                    <span class="label-tag mono" data-accent={meta.accent}>
+                      {meta.head}
+                    </span>
+                    <span
+                      class="label-tag mono scramble"
+                      data-accent={meta.accent}
+                    >
+                      {meta.text}
+                    </span>
                   </span>
-                  <span
-                    class="label-tag mono scramble"
-                    data-accent={meta.accent}
-                  >
-                    {meta.text}
-                  </span>
-                  <br />
-                </>
-              ))}
-            </p>
+                ))}
+              </p>
+            </div>
           )
         }
       </aside>
@@ -90,10 +95,12 @@ const spineMeta = latest
     --text: #eef7f1;
     --text-dim: rgba(238, 247, 241, 0.74);
     --text-mute: rgba(238, 247, 241, 0.5);
-    --spine-bg: linear-gradient(180deg, #0c2e25 0%, #1a6b54 100%);
-    --spine-accent: var(--accent-green);
-    --spine-text: #e8fff4;
-    --spine-text-dim: rgba(232, 255, 244, 0.72);
+    --spine-paper: #dce5e2;
+    --spine-ink: #121a17;
+    --spine-blue: #2848e8;
+    --spine-lime: #c8ff42;
+    --spine-text: var(--spine-ink);
+    --spine-text-dim: rgba(18, 26, 23, 0.62);
     --font-cn:
       "Noto Sans SC Variable", "Noto Sans SC", -apple-system, "PingFang SC",
       "Microsoft YaHei", sans-serif;
@@ -126,7 +133,7 @@ const spineMeta = latest
     padding: 0;
     min-height: 100vh;
     display: grid;
-    grid-template-columns: 220px minmax(0, 1fr);
+    grid-template-columns: 248px minmax(0, 1fr);
     gap: 0;
     align-items: stretch;
   }
@@ -136,55 +143,142 @@ const spineMeta = latest
     position: sticky;
     top: 0;
     height: 90vh;
-    padding: 22px 18px 22px;
+    height: 90svh;
+    padding: 30px 24px 22px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    background: var(--spine-bg);
+    overflow: hidden;
+    isolation: isolate;
+    background-color: var(--spine-paper);
+    background-image:
+      linear-gradient(rgba(18, 26, 23, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 26, 23, 0.045) 1px, transparent 1px);
+    background-size: 28px 28px;
     color: var(--spine-text);
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
+    box-shadow: inset -1px 0 0 var(--spine-ink);
   }
 
   .spine-accent-bar {
     position: absolute;
     top: 0;
     left: 0;
+    right: 1px;
+    height: 10px;
+    background: var(--spine-blue);
+    border-bottom: 2px solid var(--spine-ink);
+  }
+
+  .spine-accent-bar::after {
+    content: "";
+    position: absolute;
     right: 0;
-    height: 4px;
-    background: var(--spine-accent);
+    top: 0;
+    width: 28px;
+    height: 10px;
+    background: var(--spine-lime);
+    border-left: 2px solid var(--spine-ink);
   }
 
   .spine-top {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 8px;
+    gap: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--spine-ink);
+  }
+
+  .spine-top .eyebrow {
+    max-width: 118px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    line-height: 1.6;
+    letter-spacing: 0.14em;
+    text-wrap: balance;
+  }
+
+  .spine-registration {
+    position: relative;
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--spine-ink);
+    border-radius: 50%;
+  }
+
+  .spine-registration::before,
+  .spine-registration::after {
+    content: "";
+    position: absolute;
+    background: var(--spine-blue);
+  }
+
+  .spine-registration::before {
+    width: 30px;
+    height: 1px;
+    top: 10px;
+    left: -5px;
+  }
+
+  .spine-registration::after {
+    width: 1px;
+    height: 30px;
+    top: -5px;
+    left: 10px;
   }
 
   .spine-title {
+    position: relative;
+    display: block;
+    width: fit-content;
+    align-self: center;
     writing-mode: vertical-rl;
     transform: rotate(180deg);
-    font-size: clamp(3.2rem, 13vw, 6.5rem);
-    line-height: 0.86;
-    letter-spacing: -0.12em;
+    font-family: var(--font-ui);
+    font-size: clamp(4.25rem, 10.8vh, 6.75rem);
+    font-weight: 700;
+    line-height: 0.8;
+    letter-spacing: -0.09em;
     color: var(--spine-text);
-    margin: 1rem 0;
+    margin: auto 0;
+    padding: 20px 0;
+  }
+
+  .spine-title::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 20px 0;
+    z-index: -1;
+    color: var(--spine-blue);
+    transform: translate(5px, 4px);
+  }
+
+  .spine-mobile-eyebrow {
+    display: none;
+  }
+
+  .spine-heading {
+    display: contents;
+  }
+
+  .spine-bottom {
+    position: relative;
+    padding-top: 13px;
+    border-top: 1px solid var(--spine-ink);
   }
 
   .spine-foot {
     margin: 0;
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
     color: var(--spine-text);
-    line-height: 2;
   }
 
-  .spine-foot .sep {
-    display: inline-block;
-    width: 1ch;
-    color: var(--spine-text-dim);
-    font-weight: 600;
+  .spine-meta-row {
+    display: inline-flex;
+    align-items: center;
   }
 
   /* === panel-stack ======================================== */
@@ -203,53 +297,107 @@ const spineMeta = latest
       padding-right: 10vw;
     }
     .spine {
-      padding-left: 5vw;
+      padding-left: 36px;
     }
   }
   @media (max-width: 720px) {
     .label-shell {
       grid-template-columns: 1fr;
     }
+    .panel-stack {
+      padding-top: 92px;
+    }
     .spine {
-      position: relative;
-      top: 0;
+      position: sticky;
+      top: 10px;
       z-index: 10;
-      height: auto;
-      width: 100%;
-      padding: 14px 16px 12px;
+      height: 66px;
+      width: calc(100% - 20px);
+      margin: 10px 10px -68px;
+      padding: 0;
+      display: flex;
       flex-direction: row;
-      align-items: center;
-      gap: 12px;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 0;
       min-width: 0;
+      border: 1px solid var(--spine-ink);
+      box-shadow: 4px 4px 0 var(--spine-ink);
+      background-size: 20px 20px;
     }
     .spine-accent-bar {
-      height: 3px;
+      height: 5px;
+      border-bottom-width: 1px;
+    }
+    .spine-accent-bar::after {
+      width: 20px;
+      height: 5px;
+      border-left-width: 1px;
+    }
+    .spine-top {
+      display: none;
     }
     .spine-title {
+      width: fit-content;
       writing-mode: horizontal-tb;
       transform: none;
-      font-size: clamp(1.6rem, 8vw, 2.4rem);
+      font-size: 1.8rem;
+      line-height: 1;
+      letter-spacing: -0.06em;
       margin: 0;
+      padding: 0;
+    }
+    .spine-title::before {
+      inset: 0;
+      transform: translate(2px, 2px);
+    }
+    .spine-bottom {
+      display: flex;
+      align-items: stretch;
+      margin-top: 6px;
+      padding: 0;
+      border: 0;
+    }
+    .spine-heading {
+      display: block;
       flex: 1;
+      align-self: center;
+      padding-left: 12px;
+    }
+    .spine-mobile-eyebrow {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 0.44rem;
+      line-height: 1.2;
+      letter-spacing: 0.12em;
     }
     .spine-foot {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      row-gap: 4px;
-      column-gap: 6px;
-      min-width: 0;
-      max-width: 100%;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: stretch;
+      align-items: stretch;
+      gap: 0;
+      max-width: none;
     }
-    .spine-foot br {
-      display: none;
-    }
-    .spine-foot .label-tag {
+    .spine-meta-row {
+      flex: 1;
+      min-height: 0;
+      justify-content: flex-end;
       white-space: nowrap;
     }
-
+  }
+  @media (max-width: 360px) {
+    .spine {
+      padding: 0;
+    }
+    .spine-title {
+      font-size: 1.55rem;
+    }
+    .spine-heading {
+      padding-left: 10px;
+    }
     .spine-foot {
-      display: none;
+      max-width: none;
     }
   }
   @media (prefers-reduced-motion: reduce) {
